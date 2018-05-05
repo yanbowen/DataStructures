@@ -1,129 +1,90 @@
 # Data Structures and Algorithm Analysis in Java
 ---  
   
-## 队列（Queue）  
+### 选择，冒泡，直接插入排序   
    
-	public class Main {
-    	public static void main(String[] args) {
-    	    //add()和remove()方法在失败的时候会抛出异常(不推荐)
-    	    Queue<String> queue = new LinkedList<String>();
-    	    //添加元素
-    	    queue.offer("a");
-    	    queue.offer("b");
-    	    queue.offer("c");
-    	    queue.offer("d");
-    	    queue.offer("e");
-    	    for(String q : queue){
-    	        System.out.println(q);
-    	    }
-    	    System.out.println("===");
-    	    System.out.println("poll="+queue.poll()); //返回第一个元素，并在队列中删除
-    	    for(String q : queue){
-    	        System.out.println(q);
-    	    }
-    	    System.out.println("===");
-    	    System.out.println("element="+queue.element()); //返回第一个元素 
-    	    for(String q : queue){
-    	        System.out.println(q);
-    	    }
-    	    System.out.println("===");
-    	    System.out.println("peek="+queue.peek()); //返回第一个元素 
-    	    for(String q : queue){
-    	        System.out.println(q);
-        	}
-    	}
-	}   
-  
-* add		：增加一个元索					如果队列已满，则抛出一个IIIegaISlabEepeplian异常
-* remove	：移除并返回队列头部的元素		如果队列为空，则抛出一个NoSuchElementException异常
-* element	：返回队列头部的元素				如果队列为空，则抛出一个NoSuchElementException异常
-* offer		：添加一个元素并返回true			如果队列已满，则返回false
-* poll		：移除并返问队列头部的元素		如果队列为空，则返回null
-* peek		：返回队列头部的元素				如果队列为空，则返回null
-* put		：添加一个元素					如果队列满，则阻塞
-* take		：移除并返回队列头部的元素		如果队列为空，则阻塞  
-  
-## 链表（LinkedList）   
-  
-	public class Main {
-    	public static void main(String[] args) {
-    	    LinkedList<String> lList = new LinkedList<String>();
-    	    lList.add("1");
-    	    lList.add("2");
-        	lList.add("3");
-    	    lList.add("4");
-    	    lList.add("5");
-    	    System.out.println("链表的第一个元素是：" + lList.getFirst());
-    	    System.out.println("链表的最后一个元素是：" + lList.getLast());
-
-        	System.out.println(lList);
-        	lList.addFirst("0");
-        	System.out.println(lList);
-        	lList.addLast("6");
-        	System.out.println(lList);
-    	}
+排序是数据处理中十分常见且核心的操作，虽说实际项目开发中很小几率会需要我们手动实现，毕竟每种语言的类库中都有n多种关于排序算法的实现。但是了解这些精妙的思想对我们还是大有裨益的。本文简单温习下最基础的三类算法：选择，冒泡，插入。    
+   
+先定义个交换数组元素的函数，供排序时调用   
+   
+	   /**
+	     * 交换数组元素
+	     * @param arr
+	     * @param a
+	     * @param b
+	     */
+	    public static void swap(int []arr,int a,int b){
+	        arr[a] = arr[a]+arr[b];
+	        arr[b] = arr[a]-arr[b];
+	        arr[a] = arr[a]-arr[b];
+	    }    
+    
+#### 简单选择排序    
+   
+简单选择排序是最简单直观的一种算法，基本思想为**每一趟从待排序的数据元素中选择最小（或最大）的一个元素作为首元素**，直到所有元素排完为止，简单选择排序是**不稳定排序**。    
+    
+	public static viod selectSort(int[] arr){
+	
+		for(int m=0; m<arr.length-1; m++){
+			for(int n=m+1; n<arr.length;n++){
+				if(arr[m]>arr[n]){
+					int temp = arr[m];
+					arr[m] = arr[n];
+					arr[n] = temp;
+				}
+			}
+		}
 	}    
-  
-  
-以上代码运行输出结果为：
+   
+#### 冒泡排序   
 
-	链表的第一个元素是：1
-	链表的最后一个元素是：5
-	1, 2, 3, 4, 5
-	0, 1, 2, 3, 4, 5
-	0, 1, 2, 3, 4, 5, 6   
+冒泡排序的基本思想是，对相邻的元素进行两两比较，顺序相反则进行交换，这样，每一趟会将最小或最大的元素“浮”到顶端，最终达到完全有序。   
    
-## Stack类为线程安全类   
-  
-	public class Test {  
-    	public static void main(String[] args) {  
-        	Stack<String> s = new Stack<String>();  
-        	System.out.println("------isEmpty");  
-        	System.out.println(s.isEmpty());  
-        	System.out.println("------push");  
-        	s.push("1");  
-        	s.push("2");  
-        	s.push("3");  
-        	Test.it(s);  
-        	System.out.println("------pop");  
-        	String str = s.pop();  
-        	System.out.println(str);  
-        	Test.it(s);  
-        	System.out.println("------peek");  
-        	str = s.peek();  
-        	System.out.println(str);  
-        	Test.it(s);  
-        	System.out.println("------search");  
-        	int i = s.search("2");  
-        	System.out.println(i);  
-        	i = s.search("1");  
-        	System.out.println(i);  
-        	i = s.search("none");  
-        	System.out.println(i);  
-    	}  
-      
-    	public static void it(Stack<String> s){  
-        	System.out.print("iterator:");  
-        	Iterator<String> it = s.iterator();  
-        	while(it.hasNext()){  
-        	    System.out.print(it.next()+";");  
-        	}  
-        	System.out.print("\n");  
-    	}  
-	}      
-  
-------isEmpty  
-true            
-------push  
-iterator:1;2;3;    
-------pop  
-3       --栈顶是数组最后一个  
-iterator:1;2;  
-------peek  
-2       --pop取后删掉，peek只取不删  
-iterator:1;2;  
-------search      
-1       --以1为基数，即栈顶为1  
-2       --和栈顶见的距离为2-1=1  
--1      --不存在于栈中     
+	public static viod bubbleSort(int[] arr){
+	
+		for(int m=0; m<arr.length-1; m++){
+			for(int n=0; n<arr.length-m-1;n++){
+				if(arr[n]>arr[n+1]){
+					int temp = arr[n];
+					arr[n] = arr[n+1];
+					arr[n+1 ] = temp;
+				}
+			}
+		}
+	}   
+    
+#### 直接插入排序   
    
+直接插入排序基本思想是**每一步将一个待排序的记录，插入到前面已经排好序的有序序列中去，直到插完所有元素为止。**   
+   
+    public static void insertionSort(int[] arr) {
+        for (int i = 1; i < arr.length; i++) {
+            int j = i;
+            while (j > 0 && arr[j] < arr[j - 1]) {
+                swap(arr,j,j-1);
+                j--;
+            }
+        }
+    }    
+    
+![](https://i.imgur.com/Ycqun2g.jpg)    
+     
+### 希尔排序   
+   
+![](https://i.imgur.com/Lxu49hK.jpg)   
+   
+![](https://i.imgur.com/tU6A8Tx.jpg)   
+   
+![](https://i.imgur.com/DZmYkpV.jpg)   
+    
+![](https://i.imgur.com/L21YwjY.jpg)   
+   
+### 归并排序    
+   
+![](https://i.imgur.com/2djeNLN.jpg)    
+     
+![](https://i.imgur.com/PwYTgw4.jpg)   
+   
+![](https://i.imgur.com/M10rZ6x.jpg)
+
+![](https://i.imgur.com/hM3X6N3.jpg)   
